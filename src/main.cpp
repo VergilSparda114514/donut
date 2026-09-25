@@ -1,49 +1,58 @@
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
+#include "Renderer.h"
 
-#include <iostream>
-#include <random>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
+
 #include <thread>
 
-static std::random_device rd{};
-static std::mt19937 rng{ rd() };
+static constexpr uint32_t fps = 30;
+static constexpr float deltaTime = static_cast<float>(fps) / 1000.0f;
 
-static constexpr int fps = 30;
+static constexpr int ringCount = 100;
+static constexpr int layerCount = 100;
+
+static constexpr float radiusMajor = 1.0f;
+static constexpr float radiusMinor = 0.25f;
 
 int main()
 {
-    using namespace ftxui;
+    Renderer renderer{};
 
-    Element document = hbox({
-        text("") | border | flex,
-    });
+    std::vector<Point> points(ringCount * layerCount);
     
-    Screen screen = Screen::Create(
-        Dimension::Fixed(80),
-        Dimension::Fixed(40)
-    );
+    for (int i = 0; i < ringCount; i++)
+    {   
+        for (int j = 0; j < layerCount; j++)
+        {
+            float theta = 2.0f * M_PI * i / ringCount;
+            float phi = 2.0f * M_PI * j / layerCount;
 
-    std::uniform_int_distribution<> distx{ 1, 79 };
-    std::uniform_int_distribution<> disty{ 1, 39 };
+            glm::vec3 position{};
+            position.x = (radiusMajor + radiusMinor * glm::cos(phi)) * glm::cos(theta);
+            position.y = radiusMinor * glm::sin(phi);
+            position.z = (radiusMajor + radiusMinor * glm::cos(phi)) * glm::sin(theta);
 
-    int x = distx(rng), y = disty(rng);
+            glm::vec3 normal{};
+            normal.x = glm::cos(phi) * glm::cos(theta);
+            normal.y = glm::sin(phi);
+            normal.z = glm::cos(phi) * glm::sin(theta);
+
+            points[j + i * layerCount].position = position;
+            points[j + i * layerCount].normal = normal;
+        }
+    }
+
+    Mesh mesh{ points };
+    mesh.position = { 0.0f, 0.0f, 2.0f };
 
     while (true)
     {
-        std::cout << screen.ResetPosition();
-        
-        Cell cell{};
-        screen.CellAt(x, y) = cell;
+        renderer.DrawMesh(mesh);
+        renderer.Render();
 
-        x = distx(rng);
-        y = disty(rng);
+        mesh.rotation.x += 45.0f * deltaTime;
+        mesh.rotation.y += 90.0f * deltaTime;
 
-        cell.character = "#";
-        screen.CellAt(x, y) = cell;
-
-        Render(screen, document);
-        screen.Print();
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000 / fps));
+        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint32_t>(1.0f / deltaTime)));
     }
 }
