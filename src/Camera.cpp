@@ -23,8 +23,3 @@ glm::vec3 Camera::WorldToLocal(const glm::vec3& worldPos) const
 
     return localPos;
 }
-
-void Camera::LookAt(const glm::vec3& worldPos)
-{
-    rotation = glm::degrees(glm::eulerAngles(glm::quatLookAt(glm::normalize(worldPos - position), glm::vec3(0, 1, 0))));
-}

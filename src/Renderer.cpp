@@ -11,13 +11,14 @@ void Renderer::BindShader(std::unique_ptr<Shader> shader)
 void Renderer::DrawVertex(const Vertex& vertex)
 {
     glm::vec2 screenCoord = m_Camera.WorldToScreen(vertex.position);
-    glm::vec2 normalizedCoord = (screenCoord + 1.0f) * 0.5f;
-    glm::uvec2 pixelCoord((Width() - 1) * normalizedCoord.x, (Height() - 1) * (1.0f - normalizedCoord.y));
 
-    if (pixelCoord.x < 0 || pixelCoord.x >= Width() || pixelCoord.y < 0 || pixelCoord.y >= Height())
+    if (screenCoord.x < -1.0f || screenCoord.x > 1.0f || screenCoord.y < -1.0f || screenCoord.y > 1.0f)
     {
         return;
     }
+
+    glm::vec2 normalizedCoord = (screenCoord + 1.0f) * 0.5f;
+    glm::uvec2 pixelCoord((Width() - 1) * normalizedCoord.x, (Height() - 1) * (1.0f - normalizedCoord.y));
 
     float d = 1.0f / vertex.position.z;
 
@@ -38,7 +39,7 @@ void Renderer::DrawMesh(const Mesh& mesh)
 
 void Renderer::Render()
 {
-    std::cout << m_Screen.ResetPosition();
+    std::cout << m_Screen.ResetPosition(true);
     m_Screen.Print();
 
     for (size_t y = 0; y < Height(); y++)

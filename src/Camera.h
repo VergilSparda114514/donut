@@ -7,8 +7,6 @@ class Camera
 {
 public:
     Camera(float nearPlane = 1.0f) : m_NearPlane(nearPlane) {}
-    
-    void LookAt(const glm::vec3& worldPos);
 
     glm::vec2 WorldToScreen(const glm::vec3& worldPos) const;
 private:

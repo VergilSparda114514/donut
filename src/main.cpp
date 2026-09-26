@@ -40,8 +40,7 @@ int main()
     }
 
     Mesh mesh{ points };
-    mesh.position = { 0.0f, 0.0f, 2.00f };
-    mesh.rotation.x = 90.0f;
+    mesh.position = { 0.0f, 0.0f, 2.0f };
 
     renderer.BindShader(std::make_unique<Diffuse>(glm::vec3(-1, 1, -1)));
 
