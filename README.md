@@ -1,6 +1,7 @@
 # Donut
 
 A spinning ASCII donut that runs on the terminal, implemented in C++
+![Donut](screenshots/donut.png)
 
 ## Requirements
 
