@@ -13,6 +13,7 @@ static constexpr float radiusMinor = 0.25f;
 int main()
 {
     Renderer renderer{ 100, 50, 120 };
+    Camera& camera = renderer.GetCamera();
 
     std::vector<Vertex> points(ringCount * layerCount);
     
@@ -40,6 +41,7 @@ int main()
 
     Mesh mesh{ points };
     mesh.position = { 0.0f, 0.0f, 2.00f };
+    mesh.rotation.x = 90.0f;
 
     renderer.BindShader(std::make_unique<Diffuse>(glm::vec3(-1, 1, -1)));
 

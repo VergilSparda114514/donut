@@ -1,5 +1,8 @@
 #include "Diffuse.h"
 
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#define GLM_FORCE_LEFT_HANDED
+
 Diffuse::Diffuse(const glm::vec3& sunDirection) : m_SunDirection(glm::normalize(sunDirection))
 {
 }

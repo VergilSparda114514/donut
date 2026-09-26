@@ -8,9 +8,9 @@ void Renderer::BindShader(std::unique_ptr<Shader> shader)
     m_Shader = std::move(shader);
 }
 
-void Renderer::DrawPoint(const Vertex& point)
+void Renderer::DrawVertex(const Vertex& vertex)
 {
-    glm::vec2 screenCoord = m_Camera.WorldToScreen(point.position);
+    glm::vec2 screenCoord = m_Camera.WorldToScreen(vertex.position);
     glm::vec2 normalizedCoord = (screenCoord + 1.0f) * 0.5f;
     glm::uvec2 pixelCoord((Width() - 1) * normalizedCoord.x, (Height() - 1) * (1.0f - normalizedCoord.y));
 
@@ -19,20 +19,20 @@ void Renderer::DrawPoint(const Vertex& point)
         return;
     }
 
-    float d = 1.0f / point.position.z;
+    float d = 1.0f / vertex.position.z;
 
     if (d > m_DepthBuffer[pixelCoord.x + pixelCoord.y * Width()])
     {
         m_DepthBuffer[pixelCoord.x + pixelCoord.y * Width()] = d;
-        m_Screen.CellAt(pixelCoord.x, pixelCoord.y) = m_Shader->Exec(point);
+        m_Screen.CellAt(pixelCoord.x, pixelCoord.y) = m_Shader->Exec(vertex);
     }
 }
 
 void Renderer::DrawMesh(const Mesh& mesh)
 {
-    for (const auto& point : mesh.LocalToWorld())
+    for (const auto& vertex : mesh.LocalToWorld())
     {
-        DrawPoint(point);
+        DrawVertex(vertex);
     }
 }
 

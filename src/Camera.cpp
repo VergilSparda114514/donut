@@ -1,11 +1,30 @@
 #include "Camera.h"
 
-glm::vec2 Camera::WorldToScreen(const glm::vec3& worldPos)
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
+
+glm::vec2 Camera::WorldToScreen(const glm::vec3& worldPos) const
 {
-    glm::vec2 coord{};
+    glm::vec3 localPos = WorldToLocal(worldPos);
 
-    coord.x = m_NearPlane * worldPos.x / worldPos.z;
-    coord.y = m_NearPlane * worldPos.y / worldPos.z;
+    glm::vec2 screenCoord{};
+    screenCoord.x = localPos.x / localPos.z;
+    screenCoord.y = localPos.y / localPos.z;
 
-    return coord;
+    return screenCoord;
+}
+
+glm::vec3 Camera::WorldToLocal(const glm::vec3& worldPos) const
+{
+    glm::vec3 localPos = worldPos - position;
+    localPos = glm::angleAxis(glm::radians(-rotation.x), glm::vec3(1, 0, 0)) * localPos;
+    localPos = glm::angleAxis(glm::radians(-rotation.y), glm::vec3(0, 1, 0)) * localPos;
+    localPos = glm::angleAxis(glm::radians(-rotation.z), glm::vec3(0, 0, 1)) * localPos;
+
+    return localPos;
+}
+
+void Camera::LookAt(const glm::vec3& worldPos)
+{
+    rotation = glm::degrees(glm::eulerAngles(glm::quatLookAt(glm::normalize(worldPos - position), glm::vec3(0, 1, 0))));
 }
