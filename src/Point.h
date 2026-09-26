@@ -2,10 +2,8 @@
 
 #include <glm/glm.hpp>
 
-struct Point
+struct Vertex
 {
     glm::vec3 position{};
     glm::vec3 normal{};
-
-    char character = ' ';
 };

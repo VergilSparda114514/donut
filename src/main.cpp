@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Diffuse.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
@@ -18,7 +19,7 @@ int main()
 {
     Renderer renderer{ 100, 50 };
 
-    std::vector<Point> points(ringCount * layerCount);
+    std::vector<Vertex> points(ringCount * layerCount);
     
     for (int i = 0; i < ringCount; i++)
     {   
@@ -44,6 +45,8 @@ int main()
 
     Mesh mesh{ points };
     mesh.position = { 0.0f, 0.0f, 2.0f };
+
+    renderer.BindShader(std::make_unique<Diffuse>(glm::vec3(-1, 1, -1), ftxui::Color::Default));
 
     while (true)
     {

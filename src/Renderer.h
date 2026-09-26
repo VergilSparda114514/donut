@@ -4,8 +4,11 @@
 #include <ftxui/screen/screen.hpp>
 
 #include <glm/glm.hpp>
-#include <vector>
 
+#include <vector>
+#include <memory>
+
+#include "Shader.h"
 #include "Camera.h"
 #include "Mesh.h"
 
@@ -15,7 +18,8 @@ public:
     Renderer(uint32_t width = 80, uint32_t height = 40) : m_Width(width), m_Height(height),
         m_Screen(ftxui::Screen::Create(ftxui::Dimension::Fixed(width), ftxui::Dimension::Fixed(height))), m_DepthBuffer(width * height) {}
 
-    void DrawPoint(const Point& point);
+    void BindShader(std::unique_ptr<Shader> shader);
+    void DrawPoint(const Vertex& point);
     void DrawMesh(const Mesh& mesh);
     void Render();
 
@@ -29,4 +33,5 @@ private:
     std::vector<float> m_DepthBuffer;
 
     Camera m_Camera{};
+    std::unique_ptr<Shader> m_Shader = nullptr;
 };

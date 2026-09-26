@@ -2,11 +2,12 @@
 
 #include <iostream>
 
-static std::string luminance = ".,-~:;=!*#$@";
+void Renderer::BindShader(std::unique_ptr<Shader> shader)
+{
+    m_Shader = std::move(shader);
+}
 
-static glm::vec3 sunDirection = glm::normalize(glm::vec3(-1, 1, -1));
-
-void Renderer::DrawPoint(const Point& point)
+void Renderer::DrawPoint(const Vertex& point)
 {
     glm::vec2 screenCoord = m_Camera.WorldToScreen(point.position);
     glm::vec2 normalizedCoord = (screenCoord + 1.0f) * 0.5f;
@@ -22,14 +23,7 @@ void Renderer::DrawPoint(const Point& point)
     if (d > m_DepthBuffer[pixelCoord.x + pixelCoord.y * Width()])
     {
         m_DepthBuffer[pixelCoord.x + pixelCoord.y * Width()] = d;
-
-        float light = glm::max(glm::dot(point.normal, sunDirection), 0.0f);
-        
-        ftxui::Cell cell{};
-        cell.foreground_color = ftxui::Color::Green;
-        cell.character = luminance[static_cast<size_t>(luminance.size() * light)];
-
-        m_Screen.CellAt(pixelCoord.x, pixelCoord.y) = cell;
+        m_Screen.CellAt(pixelCoord.x, pixelCoord.y) = m_Shader->Exec(point);
     }
 }
 
