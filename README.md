@@ -18,10 +18,3 @@ A spinning ASCII donut that runs on the terminal, implemented in C++
 * [FTXUI](https://github.com/ArthurSonzogni/FTXUI)
 * [glm](https://github.com/g-truc/glm)
 
-### TODO
-
-* [ ] MVP Matrices
-* [ ] Line Rendering
-* [ ] Triangle Rendering
-* [ ] Model Loading
-
