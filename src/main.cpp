@@ -4,11 +4,6 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
-#include <thread>
-
-static constexpr uint32_t fps = 120;
-static constexpr float deltaTime = 1.0f / static_cast<float>(fps);
-
 static constexpr int ringCount = 100;
 static constexpr int layerCount = 100;
 
@@ -17,7 +12,7 @@ static constexpr float radiusMinor = 0.25f;
 
 int main()
 {
-    Renderer renderer{ 100, 50 };
+    Renderer renderer{ 100, 50, 120 };
 
     std::vector<Vertex> points(ringCount * layerCount);
     
@@ -44,18 +39,16 @@ int main()
     }
 
     Mesh mesh{ points };
-    mesh.position = { 0.0f, 0.0f, 2.0f };
+    mesh.position = { 0.0f, 0.0f, 2.00f };
 
-    renderer.BindShader(std::make_unique<Diffuse>(glm::vec3(-1, 1, -1), ftxui::Color::Default));
+    renderer.BindShader(std::make_unique<Diffuse>(glm::vec3(-1, 1, -1)));
 
     while (true)
     {
+        mesh.rotation.x += 45.0f * renderer.DeltaTime();
+        mesh.rotation.y += 90.0f * renderer.DeltaTime();
+
         renderer.DrawMesh(mesh);
         renderer.Render();
-
-        mesh.rotation.x += 45.0f * deltaTime;
-        mesh.rotation.y += 90.0f * deltaTime;
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint32_t>(1000.0f * deltaTime)));
     }
 }

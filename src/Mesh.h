@@ -7,16 +7,16 @@
 class Mesh
 {
 public:
-    Mesh(const std::vector<Vertex>& points) : m_Points(points) {}
+    Mesh(const std::vector<Vertex>& points) : m_Vertices(points) {}
 
     std::vector<Vertex> LocalToWorld() const;
 
-    std::vector<Vertex>& GetPoints() { return m_Points; }
-    const std::vector<Vertex>& GetPoints() const { return m_Points; }
+    std::vector<Vertex>& GetVertices() { return m_Vertices; }
+    const std::vector<Vertex>& GetVertices() const { return m_Vertices; }
 public:
     glm::vec3 position{};
     glm::vec3 rotation{};
     glm::vec3 scale{ 1.0f };
 private:
-    std::vector<Vertex> m_Points;
+    std::vector<Vertex> m_Vertices;
 };

@@ -1,6 +1,7 @@
 #include "Renderer.h"
 
 #include <iostream>
+#include <thread>
 
 void Renderer::BindShader(std::unique_ptr<Shader> shader)
 {
@@ -48,4 +49,11 @@ void Renderer::Render()
             m_DepthBuffer[x + y * Width()] = 0.0f;
         }
     }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000 / m_TargetFPS));
+}
+
+void Renderer::SetTargetFPS(uint32_t targetFPS)
+{
+    m_TargetFPS = targetFPS;
 }
