@@ -5,7 +5,7 @@
 class Diffuse : public Shader
 {
 public:
-    Diffuse(const glm::vec3& sunDirection);
+    Diffuse(const glm::vec3& sunDirection) : m_SunDirection(glm::normalize(sunDirection)) {}
 
     virtual ftxui::Cell Exec(const Vertex& point) override;
 private:
