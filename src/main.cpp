@@ -5,8 +5,8 @@
 
 #include <thread>
 
-static constexpr uint32_t fps = 30;
-static constexpr float deltaTime = static_cast<float>(fps) / 1000.0f;
+static constexpr uint32_t fps = 120;
+static constexpr float deltaTime = 1.0f / static_cast<float>(fps);
 
 static constexpr int ringCount = 100;
 static constexpr int layerCount = 100;
@@ -16,7 +16,7 @@ static constexpr float radiusMinor = 0.25f;
 
 int main()
 {
-    Renderer renderer{};
+    Renderer renderer{ 100, 50 };
 
     std::vector<Point> points(ringCount * layerCount);
     
@@ -53,6 +53,6 @@ int main()
         mesh.rotation.x += 45.0f * deltaTime;
         mesh.rotation.y += 90.0f * deltaTime;
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint32_t>(1.0f / deltaTime)));
+        std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<uint32_t>(1000.0f * deltaTime)));
     }
 }

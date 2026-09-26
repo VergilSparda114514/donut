@@ -17,16 +17,18 @@ void Renderer::DrawPoint(const Point& point)
         return;
     }
 
-    float light = glm::max(glm::dot(point.normal, sunDirection), 0.0f);
-    
-    ftxui::Cell cell{};
-    cell.character = luminance[static_cast<size_t>(luminance.size() * light)];
-
     float d = 1.0f / point.position.z;
 
     if (d > m_DepthBuffer[pixelCoord.x + pixelCoord.y * Width()])
     {
         m_DepthBuffer[pixelCoord.x + pixelCoord.y * Width()] = d;
+
+        float light = glm::max(glm::dot(point.normal, sunDirection), 0.0f);
+        
+        ftxui::Cell cell{};
+        cell.foreground_color = ftxui::Color::Green;
+        cell.character = luminance[static_cast<size_t>(luminance.size() * light)];
+
         m_Screen.CellAt(pixelCoord.x, pixelCoord.y) = cell;
     }
 }

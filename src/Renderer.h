@@ -26,6 +26,7 @@ private:
     uint32_t m_Height = 0;
 
     ftxui::Screen m_Screen;
-    Camera m_Camera{};
     std::vector<float> m_DepthBuffer;
+
+    Camera m_Camera{};
 };
