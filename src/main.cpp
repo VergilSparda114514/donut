@@ -11,6 +11,12 @@
 #include <algorithm>
 #include <optional>
 
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <sys/ioctl.h>
+#endif
+
 static constexpr int ringCount = 100;
 static constexpr int layerCount = 100;
 
@@ -24,16 +30,18 @@ static void push_args(int* argc, const char*** argv)
 }
 
 template <typename T>
-static std::optional<T> parse_arg(const char* arg, const std::string& key)
+static std::optional<T> parse_arg(const char* argStr, const std::string& key)
 {
     std::optional<T> result = std::nullopt;
-    std::string argStr = arg;
+    std::string arg = argStr;
 
-    if (auto it = argStr.find(key); it != std::string::npos)
+    std::transform(arg.begin(), arg.end(), arg.begin(), std::tolower);
+
+    if (auto it = arg.find(key); it != std::string::npos)
     {
         try
         {
-            result = T(argStr.substr(it + key.length()));
+            result = T(arg.substr(it + key.length()));
         } catch(...) {}
     }
 
@@ -41,16 +49,18 @@ static std::optional<T> parse_arg(const char* arg, const std::string& key)
 }
 
 template <>
-std::optional<int> parse_arg(const char* arg, const std::string& key)
+std::optional<int> parse_arg(const char* argStr, const std::string& key)
 {
     std::optional<int> num = std::nullopt;
-    std::string argStr = arg;
+    std::string arg = argStr;
 
-    if (auto it = argStr.find(key); it != std::string::npos)
+    std::transform(arg.begin(), arg.end(), arg.begin(), std::tolower);
+
+    if (auto it = arg.find(key); it != std::string::npos)
     {
         try
         {
-            num = std::stoi(argStr.substr(it + key.length()));
+            num = std::stoi(arg.substr(it + key.length()));
         } catch(...) {}
     }
 
@@ -68,26 +78,38 @@ int main(int argc, const char* argv[])
     
     for (int i = 0; i < argc; i++)
     {
-        if (auto w = parse_arg<int>(argv[i], "-w="); w.has_value())
-        {
-            width = *w;
-        }
+        width = parse_arg<int>(argv[i], "-w=").value_or(width);
+        height = parse_arg<int>(argv[i], "-w=").value_or(height);
+        fps = parse_arg<int>(argv[i], "-w=").value_or(fps);
         
-        else if (auto h = parse_arg<int>(argv[i], "-h="); h.has_value())
-        {
-            height = *h;
-        }
-        
-        else if (auto f = parse_arg<int>(argv[i], "-fps="); f.has_value())
-        {
-            fps = *f;
-        }
-        
-        else if (auto s = parse_arg<std::string>(argv[i], "-shd="); s.has_value())
+        if (auto s = parse_arg<std::string>(argv[i], "-shd="); s.has_value())
         {
             complexShader = std::tolower((*s)[0]) == 'y';
         }
     }
+
+#ifdef _WIN32
+    CONSOLE_SCREEN_BUFFER_INFO csbi{};
+
+    if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi))
+    {
+        uint32_t x = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+        uint32_t y = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+        
+        width = std::clamp(width, 0u, x);
+        height = std::clamp(height, 0u, y);
+    }
+
+    fps = max(fps, 1);
+#else
+    struct winsize ws;
+    ioctl(0, TIOCGWINSZ, &ws);
+    
+    width = std::clamp(width, 0u, static_cast<uint32_t>(ws.ws_row));
+    height = std::clamp(height, 0u, static_cast<uint32_t>(ws.ws_col));
+
+    fps = std::max(fps, 1u);
+#endif
 
     Renderer renderer{ width, height, fps };
     Camera& camera = renderer.GetCamera();
