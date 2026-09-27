@@ -1,6 +1,5 @@
 #pragma once
 
-#include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 
 #include <glm/glm.hpp>

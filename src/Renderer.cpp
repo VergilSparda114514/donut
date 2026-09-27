@@ -1,5 +1,7 @@
 #include "Renderer.h"
 
+#include <ftxui/dom/elements.hpp>
+
 #include <iostream>
 #include <thread>
 

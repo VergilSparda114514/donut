@@ -43,7 +43,7 @@ int main()
     mesh.position = { 0.0f, 0.0f, 2.0f };
 
     std::unique_ptr<BlinnPhong> brdf = std::make_unique<BlinnPhong>(camera);
-    brdf->diffuseColor = glm::vec3(1.0f, 0.0, 0.0f);
+    brdf->diffuseColor = glm::vec3(1.0f, 0.0f, 0.0f);
     brdf->specularColor = glm::vec3(1.0f);
     brdf->specular = 16.0f;
 
