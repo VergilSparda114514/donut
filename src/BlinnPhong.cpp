@@ -20,7 +20,7 @@ ftxui::Cell BlinnPhong::frag(const Vertex& vertex)
 
     ftxui::Cell cell{};
     cell.foreground_color = ftxui::Color(color.r * 255, color.g * 255, color.b * 255);
-    cell.character = luminance[static_cast<size_t>(luminance.size() * cosTheta)];
+    cell.character =  luminance[static_cast<size_t>(luminance.size() * cosTheta)];
 
     return cell;
 }
