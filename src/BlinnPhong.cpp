@@ -4,7 +4,7 @@ static std::string luminance = ".,-~:;=!*#$@";
 static glm::vec3 lightDirection = glm::vec3(-1, 1, -1);
 static glm::vec3 lightColor = glm::vec3(1.0f);
 
-ftxui::Cell BlinnPhong::Exec(const Vertex& vertex)
+ftxui::Cell BlinnPhong::frag(const Vertex& vertex)
 {
     glm::vec3 N = glm::normalize(vertex.normal);
     glm::vec3 L = glm::normalize(lightDirection);

@@ -27,7 +27,7 @@ void Renderer::DrawVertex(const Vertex& vertex)
     if (d > m_DepthBuffer[pixelCoord.x + pixelCoord.y * Width()])
     {
         m_DepthBuffer[pixelCoord.x + pixelCoord.y * Width()] = d;
-        m_Screen.CellAt(pixelCoord.x, pixelCoord.y) = m_Shader->Exec(vertex);
+        m_Screen.CellAt(pixelCoord.x, pixelCoord.y) = m_Shader->frag(vertex);
     }
 }
 

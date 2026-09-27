@@ -9,5 +9,5 @@ class Shader
 public:
     virtual ~Shader() = default;
 
-    virtual ftxui::Cell Exec(const Vertex& point) = 0;
+    virtual ftxui::Cell frag(const Vertex& point) = 0;
 };
