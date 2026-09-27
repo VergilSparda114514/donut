@@ -4,6 +4,16 @@
 
 #include <iostream>
 #include <thread>
+#include <chrono>
+
+Renderer::Renderer(uint32_t width, uint32_t height, uint32_t targetFPS) :
+    m_Width(width), m_Height(height), m_TargetFPS(targetFPS), m_AspectRatio(static_cast<float>(width) / static_cast<float>(height * 2)),
+    m_Screen(ftxui::Screen::Create(ftxui::Dimension::Fixed(width), ftxui::Dimension::Fixed(height))), m_DepthBuffer(width * height), m_Camera(1.0f)
+{
+#ifdef _WIN32
+    m_AspectRatio *= 8.0f / 9.0f;
+#endif
+}
 
 void Renderer::BindShader(std::unique_ptr<Shader> shader)
 {
@@ -13,6 +23,7 @@ void Renderer::BindShader(std::unique_ptr<Shader> shader)
 void Renderer::DrawVertex(const Vertex& vertex)
 {
     glm::vec2 screenCoord = m_Camera.WorldToScreen(vertex.position);
+    screenCoord.y *= m_AspectRatio;
 
     if (screenCoord.x < -1.0f || screenCoord.x > 1.0f || screenCoord.y < -1.0f || screenCoord.y > 1.0f)
     {
@@ -20,7 +31,7 @@ void Renderer::DrawVertex(const Vertex& vertex)
     }
 
     glm::vec2 normalizedCoord = (screenCoord + 1.0f) * 0.5f;
-    glm::uvec2 pixelCoord((Width() - 1) * normalizedCoord.x, (Height() - 1) * (1.0f - normalizedCoord.y) * m_AspectRatio);
+    glm::uvec2 pixelCoord((Width() - 1) * normalizedCoord.x, (Height() - 1) * (1.0f - normalizedCoord.y));
 
     float d = 1.0f / vertex.position.z;
 
@@ -41,10 +52,12 @@ void Renderer::DrawMesh(const Mesh& mesh)
 
 void Renderer::Render()
 {
-    static std::chrono::time_point<std::chrono::high_resolution_clock> start = std::chrono::high_resolution_clock::now();
-    std::chrono::time_point<std::chrono::high_resolution_clock> now = std::chrono::high_resolution_clock::now();
+    using namespace std::chrono;
 
-    m_DeltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(now - start).count() / static_cast<float>(std::chrono::nanoseconds::period::den);
+    static time_point<high_resolution_clock> start = high_resolution_clock::now();
+    time_point<high_resolution_clock> now = high_resolution_clock::now();
+
+    m_DeltaTime = std::chrono::duration_cast<nanoseconds>(now - start).count() / static_cast<float>(nanoseconds::period::den);
     start = now;
 
     std::cout << m_Screen.ResetPosition();
@@ -67,11 +80,6 @@ void Renderer::Render()
 
     if (m_TargetFPS > 0)
     {
-        std::this_thread::sleep_for(std::chrono::nanoseconds(std::chrono::nanoseconds::period::den / m_TargetFPS));
+        std::this_thread::sleep_for(nanoseconds(nanoseconds::period::den / m_TargetFPS));
     }
-}
-
-void Renderer::SetTargetFPS(uint32_t targetFPS)
-{
-    m_TargetFPS = targetFPS;
 }
