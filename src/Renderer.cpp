@@ -20,7 +20,7 @@ void Renderer::DrawVertex(const Vertex& vertex)
     }
 
     glm::vec2 normalizedCoord = (screenCoord + 1.0f) * 0.5f;
-    glm::uvec2 pixelCoord((Width() - 1) * normalizedCoord.x, (Height() - 1) * (1.0f - normalizedCoord.y));
+    glm::uvec2 pixelCoord((Width() - 1) * normalizedCoord.x, (Height() - 1) * (1.0f - normalizedCoord.y) * m_AspectRatio);
 
     float d = 1.0f / vertex.position.z;
 

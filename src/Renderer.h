@@ -15,7 +15,8 @@ class Renderer
 {
 public:
     Renderer(uint32_t width = 80, uint32_t height = 40, uint32_t targetFPS = 30) : m_Width(width), m_Height(height), m_TargetFPS(targetFPS),
-        m_Screen(ftxui::Screen::Create(ftxui::Dimension::Fixed(width), ftxui::Dimension::Fixed(height))), m_DepthBuffer(width * height), m_Camera(1.0f) {}
+        m_AspectRatio(static_cast<float>(width) / static_cast<float>(height * 2)), m_Screen(ftxui::Screen::Create(ftxui::Dimension::Fixed(width),
+        ftxui::Dimension::Fixed(height))), m_DepthBuffer(width * height), m_Camera(1.0f) {}
 
     void BindShader(std::unique_ptr<Shader> shader);
     void DrawVertex(const Vertex& point);
@@ -34,6 +35,7 @@ private:
     uint32_t m_Width = 0;
     uint32_t m_Height = 0;
     uint32_t m_TargetFPS = 0;
+    float m_AspectRatio = 0.0f;
 
     ftxui::Screen m_Screen;
     std::vector<float> m_DepthBuffer;
