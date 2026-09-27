@@ -47,8 +47,11 @@ int main(int argc, const char* argv[])
     Renderer renderer{ width, height, fps };
     Camera& camera = renderer.GetCamera();
 
-    Mesh mesh = shapes::Torus(1.0f, 0.25f, 100, 100);
-    mesh.position = { 0.0f, 0.0f, 2.0f };
+    Mesh donut = shapes::Torus(1.0f, 0.25f, 100, 100);
+    donut.position = { -2.5f, 0.0f, 5.0f };
+
+    Mesh ball = shapes::Sphere(1.0f, 100, 100);
+    ball.position = { 2.5f, 0.0f, 5.0f };
 
     std::unique_ptr<Shader> shader = std::make_unique<PixelShade>();
 
@@ -66,10 +69,11 @@ int main(int argc, const char* argv[])
 
     while (true)
     {
-        mesh.rotation.x += 45.0f * renderer.DeltaTime();
-        mesh.rotation.y += 90.0f * renderer.DeltaTime();
+        donut.rotation.x += 45.0f * renderer.DeltaTime();
+        donut.rotation.y += 90.0f * renderer.DeltaTime();
 
-        renderer.DrawMesh(mesh);
+        renderer.DrawMesh(donut);
+        renderer.DrawMesh(ball);
         renderer.Render();
     }
 }
