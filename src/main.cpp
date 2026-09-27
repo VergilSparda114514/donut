@@ -1,5 +1,5 @@
 #include "Renderer.h"
-#include "Diffuse.h"
+#include "BlinnPhong.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
@@ -15,7 +15,7 @@ int main()
     Renderer renderer{ 100, 50, 120 };
     Camera& camera = renderer.GetCamera();
 
-    std::vector<Vertex> points(ringCount * layerCount);
+    std::vector<Vertex> vertices(ringCount * layerCount);
     
     for (int i = 0; i < ringCount; i++)
     {   
@@ -34,15 +34,20 @@ int main()
             normal.y = glm::sin(phi);
             normal.z = glm::cos(phi) * glm::sin(theta);
 
-            points[j + i * layerCount].position = position;
-            points[j + i * layerCount].normal = normal;
+            vertices[j + i * layerCount].position = position;
+            vertices[j + i * layerCount].normal = normal;
         }
     }
 
-    Mesh mesh{ points };
+    Mesh mesh{ vertices };
     mesh.position = { 0.0f, 0.0f, 2.0f };
 
-    renderer.BindShader(std::make_unique<Diffuse>(glm::vec3(-1, 1, -1)));
+    std::unique_ptr<BlinnPhong> brdf = std::make_unique<BlinnPhong>(camera);
+    brdf->diffuseColor = glm::vec3(1.0f, 0.0, 0.0f);
+    brdf->specularColor = glm::vec3(1.0f);
+    brdf->specular = 16.0f;
+
+    renderer.BindShader(std::move(brdf));
 
     while (true)
     {

@@ -39,7 +39,13 @@ void Renderer::DrawMesh(const Mesh& mesh)
 
 void Renderer::Render()
 {
-    std::cout << m_Screen.ResetPosition(true);
+    std::cout << m_Screen.ResetPosition();
+
+    ftxui::Element border = ftxui::hbox({
+        ftxui::text("") | ftxui::border | ftxui::flex
+    });
+
+    ftxui::Render(m_Screen, border);
     m_Screen.Print();
 
     for (size_t y = 0; y < Height(); y++)
