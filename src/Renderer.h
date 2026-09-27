@@ -30,12 +30,13 @@ public:
 
     constexpr uint32_t Width() const { return m_Width; }
     constexpr uint32_t Height() const { return m_Height; }
-    constexpr float DeltaTime() const { return 1.0f / m_TargetFPS; }
+    constexpr float DeltaTime() const { return m_DeltaTime; }
 private:
     uint32_t m_Width = 0;
     uint32_t m_Height = 0;
     uint32_t m_TargetFPS = 0;
     float m_AspectRatio = 0.0f;
+    float m_DeltaTime = 0.0f;
 
     ftxui::Screen m_Screen;
     std::vector<float> m_DepthBuffer;

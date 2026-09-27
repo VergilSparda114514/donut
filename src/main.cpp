@@ -29,10 +29,20 @@ int main(int argc, const char* argv[])
     }
     
     auto [twidth, theight] = terminal::GetDimensions();
-    
+
     width = std::clamp(width, 0u, twidth);
     height = std::clamp(height, 0u, theight);
     fps = std::max(fps, 0u);
+
+    if (width == 0)
+    {
+        width = twidth;
+    }
+
+    if (height == 0)
+    {
+        height = theight;
+    }
 
     Renderer renderer{ width, height, fps };
     Camera& camera = renderer.GetCamera();

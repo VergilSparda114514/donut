@@ -41,6 +41,12 @@ void Renderer::DrawMesh(const Mesh& mesh)
 
 void Renderer::Render()
 {
+    static std::chrono::time_point<std::chrono::high_resolution_clock> start = std::chrono::high_resolution_clock::now();
+    std::chrono::time_point<std::chrono::high_resolution_clock> now = std::chrono::high_resolution_clock::now();
+
+    m_DeltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(now - start).count() / static_cast<float>(std::chrono::nanoseconds::period::den);
+    start = now;
+
     std::cout << m_Screen.ResetPosition();
 
     ftxui::Element border = ftxui::hbox({
@@ -59,7 +65,10 @@ void Renderer::Render()
         }
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000 / m_TargetFPS));
+    if (m_TargetFPS > 0)
+    {
+        std::this_thread::sleep_for(std::chrono::nanoseconds(std::chrono::nanoseconds::period::den / m_TargetFPS));
+    }
 }
 
 void Renderer::SetTargetFPS(uint32_t targetFPS)
