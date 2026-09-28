@@ -8,6 +8,7 @@
 #endif
 
 #include <utility>
+#include <cstdint>
 
 namespace terminal
 {
