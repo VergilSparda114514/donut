@@ -11,10 +11,11 @@ A spinning ASCII donut that runs on the terminal, implemented in C++
 
 ### Command line arguments
 
-* `-w=` to the width of the viewport; 0 sets it to terminal width (e.g. -w=80)
-* `-h=` to the height of the viewport; it is recommended to set height to be half of the width; 0 sets it to terminal height (e.g. -h=40)
-* `-fps=` to the target FPS of the application; 0 sets removes FPS cap (e.g. -fps=60)
-* `-shd=` (y/n) to enable/disable complex shading (e.g. -shd=n)
+* `-w=` to the width of the viewport; 0 sets it to terminal width; default is 60 (e.g. -w=80)
+* `-h=` to the height of the viewport; 0 sets it to terminal height; default is 30 (e.g. -h=40)
+* `-fps=` to the target FPS of the application; 0 sets removes FPS cap; default is 30 (e.g. -fps=60)
+* `-shd=` (y/n) to enable/disable complex shading; default is on (e.g. -shd=n)
+* `-brd=` (y/n) to enable/disable borders; default is on (e.g. -brd=n)
 
 ## Building
 

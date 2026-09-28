@@ -15,6 +15,7 @@ int main(int argc, const char* argv[])
     uint32_t height = 30;
     uint32_t fps = 30;
     bool complexShader = true;
+    bool border = true;
     
     for (int i = 0; i < argc; i++)
     {
@@ -25,6 +26,11 @@ int main(int argc, const char* argv[])
         if (auto s = args::parse<std::string>(argv[i], "-shd="); s.has_value())
         {
             complexShader = std::tolower((*s)[0]) == 'y';
+        }
+        
+        if (auto s = args::parse<std::string>(argv[i], "-brd="); s.has_value())
+        {
+            border = std::tolower((*s)[0]) == 'y';
         }
     }
     
@@ -46,6 +52,8 @@ int main(int argc, const char* argv[])
 
     Renderer renderer{ width, height, fps };
     Camera& camera = renderer.GetCamera();
+
+    renderer.SetBorder(border);
 
     Mesh donut = shapes::Torus(1.0f, 0.25f, 100, 100);
     donut.position = { -2.5f, 0.0f, 5.0f };

@@ -62,11 +62,15 @@ void Renderer::Render()
 
     std::cout << m_Screen.ResetPosition();
 
-    ftxui::Element border = ftxui::hbox({
-        ftxui::text("") | ftxui::border | ftxui::flex
-    });
+    if (m_EnableBorder)
+    {
+        ftxui::Element border = ftxui::hbox({
+            ftxui::text("") | ftxui::border | ftxui::flex
+        });
 
-    ftxui::Render(m_Screen, border);
+        ftxui::Render(m_Screen, border);
+    }
+
     m_Screen.Print();
 
     for (size_t y = 0; y < Height(); y++)
@@ -82,4 +86,9 @@ void Renderer::Render()
     {
         std::this_thread::sleep_for(nanoseconds(nanoseconds::period::den / m_TargetFPS));
     }
+}
+
+void Renderer::SetBorder(bool border)
+{
+    m_EnableBorder = border;
 }
