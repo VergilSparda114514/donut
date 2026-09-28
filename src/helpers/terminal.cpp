@@ -14,6 +14,8 @@ namespace terminal
             
             return { x, y };
         }
+
+        return { 0, 0 };
     #else
         struct winsize ws;
         ioctl(0, TIOCGWINSZ, &ws);

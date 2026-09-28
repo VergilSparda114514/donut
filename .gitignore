@@ -1,8 +1,8 @@
 # Directories
-
-/.vscode
-/build
+.vscode/
+build/
 
 # Files
-
 .DS_Store
+
+# Exclude
