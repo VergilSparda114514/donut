@@ -5,7 +5,7 @@ A spinning ASCII donut that runs on the terminal, implemented in C++
 
 ## Requirements
 
-* [CMake 3.20+](https://cmake.org/)
+* [CMake 3.20+](https://cmake.org)
 
 # Getting Started
 

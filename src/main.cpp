@@ -55,7 +55,7 @@ int main(int argc, const char* argv[])
     renderer.SetBorder(border);
 
     Mesh donut = shapes::Torus(1.0f, 0.25f, 100, 100);
-    donut.position = { -2.5f, 0.0f, 5.0f };
+    donut.position = { 0.0f, 0.0f, 3.0f };
 
     Mesh ball = shapes::Sphere(1.0f, 100, 100);
     ball.position = { 2.5f, 0.0f, 5.0f };
@@ -80,7 +80,7 @@ int main(int argc, const char* argv[])
         donut.rotation.y += 90.0f * renderer.DeltaTime();
 
         renderer.DrawMesh(donut);
-        renderer.DrawMesh(ball);
+        // renderer.DrawMesh(ball);
         renderer.Render();
     }
 }
