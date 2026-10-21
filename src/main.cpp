@@ -4,16 +4,15 @@
 #include "PixelShade.h"
 
 #include "helpers/args.h"
-#include "helpers/terminal.h"
 #include "helpers/shapes.h"
 
 int main(int argc, const char* argv[])
 {
     args::push(&argc, &argv);
 
-    uint32_t width = 60;
-    uint32_t height = 30;
-    uint32_t fps = 30;
+    int width = 60;
+    int height = 30;
+    int fps = 30;
     bool complexShader = true;
     bool border = true;
     
@@ -34,11 +33,11 @@ int main(int argc, const char* argv[])
         }
     }
     
-    auto [twidth, theight] = terminal::GetDimensions();
+    auto [twidth, theight] = ftxui::Terminal::Size();
 
-    width = std::clamp(width, 0u, twidth);
-    height = std::clamp(height, 0u, theight);
-    fps = std::max(fps, 0u);
+    width = std::clamp(width, 0, twidth);
+    height = std::clamp(height, 0, theight);
+    fps = std::max(fps, 0);
 
     if (width == 0)
     {

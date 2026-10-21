@@ -6,7 +6,7 @@
 #include <thread>
 #include <chrono>
 
-Renderer::Renderer(uint32_t width, uint32_t height, uint32_t targetFPS) :
+Renderer::Renderer(int width, int height, int targetFPS) :
     m_Width(width), m_Height(height), m_TargetFPS(targetFPS), m_AspectRatio(static_cast<float>(width) / static_cast<float>(height * 2)),
     m_Screen(ftxui::Screen::Create(ftxui::Dimension::Fixed(width), ftxui::Dimension::Fixed(height))), m_DepthBuffer(width * height), m_Camera(1.0f)
 {

@@ -14,7 +14,7 @@
 class Renderer
 {
 public:
-    Renderer(uint32_t width = 80, uint32_t height = 40, uint32_t targetFPS = 30);
+    Renderer(int width = 80, int height = 40, int targetFPS = 30);
 
     void BindShader(std::unique_ptr<Shader> shader);
     void DrawVertex(const Vertex& point);
@@ -26,13 +26,13 @@ public:
 
     void SetBorder(bool border);
 
-    constexpr uint32_t Width() const { return m_Width; }
-    constexpr uint32_t Height() const { return m_Height; }
+    constexpr int Width() const { return m_Width; }
+    constexpr int Height() const { return m_Height; }
     constexpr float DeltaTime() const { return m_DeltaTime; }
 private:
-    uint32_t m_Width = 0;
-    uint32_t m_Height = 0;
-    uint32_t m_TargetFPS = 0;
+    int m_Width = 0;
+    int m_Height = 0;
+    int m_TargetFPS = 0;
     float m_AspectRatio = 0.0f;
     float m_DeltaTime = 0.0f;
     bool m_EnableBorder = true;
